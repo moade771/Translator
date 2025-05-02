@@ -88,14 +88,14 @@
     <h2>Translator</h2>
 
     <div class="select-row">
-      <select id="from">
+      <select id="from" onchange="translateText()">
         <option value="en">English</option>
         <option value="fr">French</option>
         <option value="es">Spanish</option>
         <option value="ar">Arabic</option>
       </select>
       →
-      <select id="to">
+      <select id="to" onchange="translateText()">
         <option value="en">English</option>
         <option value="fr">French</option>
         <option value="es">Spanish</option>
@@ -103,7 +103,7 @@
       </select>
     </div>
 
-    <textarea id="text" placeholder="Type your text here..."></textarea>
+    <textarea id="text" placeholder="Type your text here..." oninput="translateText()"></textarea>
 
     <input type="submit" value="Translate" onclick="translateText();">
 
@@ -112,7 +112,12 @@
 
   <script>
     function translateText() {
-      var text = document.getElementById('text').value;
+      var text = document.getElementById('text').value.trim();
+      if (text === "") {
+        document.getElementById('result').innerText = "Your translation will appear here.";
+        return;
+      }
+
       var from = document.getElementById('from').value;
       var to = document.getElementById('to').value;
 
