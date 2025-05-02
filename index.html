@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Translator</title>
+  <title>TRANSLATORIC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <style>
     html, body {
@@ -19,7 +19,7 @@
 
     .container {
       width: 100%;
-      max-width: 1000px;
+      max-width: 900px;
       height: 100%;
       padding: 20px;
       box-sizing: border-box;
@@ -29,21 +29,33 @@
       justify-content: center;
     }
 
-    h2 {
+    h1 {
       text-align: center;
+      font-size: 32px;
       margin-bottom: 10px;
-      font-size: 24px;
+      letter-spacing: 1px;
     }
 
     .select-row {
       text-align: center;
       margin: 10px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
     select {
       font-size: 16px;
       padding: 5px 10px;
-      margin: 0 10px;
+      margin: 5px;
+    }
+
+    button.switch-btn {
+      font-size: 16px;
+      margin: 5px;
+      padding: 5px 12px;
+      cursor: pointer;
     }
 
     textarea {
@@ -65,14 +77,29 @@
       overflow-y: auto;
       border: 1px solid #ccc;
     }
+
+    .translate-btn {
+      font-size: 18px;
+      padding: 8px 20px;
+      margin: 10px auto;
+      display: block;
+      cursor: pointer;
+    }
+
+    .note {
+      text-align: center;
+      font-size: 14px;
+      color: #555;
+      margin-top: 15px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Translator</h2>
+    <h1>TRANSLATORIC</h1>
 
     <div class="select-row">
-      <select id="from" onchange="translateText()">
+      <select id="from">
         <option value="en">English</option>
         <option value="fr">French</option>
         <option value="es">Spanish</option>
@@ -84,8 +111,10 @@
         <option value="zh">Chinese</option>
         <option value="ja">Japanese</option>
       </select>
-      →
-      <select id="to" onchange="translateText()">
+
+      <button class="switch-btn" onclick="switchLanguages()">⇄</button>
+
+      <select id="to">
         <option value="en">English</option>
         <option value="fr">French</option>
         <option value="es">Spanish</option>
@@ -99,11 +128,21 @@
       </select>
     </div>
 
-    <textarea id="text" placeholder="Type your text here..." oninput="translateText()"></textarea>
+    <textarea id="text" placeholder="Type your text here..."></textarea>
+    <button class="translate-btn" onclick="translateText()">Translate</button>
     <div class="output" id="result">Your translation will appear here.</div>
+    <div class="note">Note: avoid using shortened words like “I’m”, “u”, “don’t” — they may not translate correctly.</div>
   </div>
 
   <script>
+    function switchLanguages() {
+      var from = document.getElementById("from");
+      var to = document.getElementById("to");
+      var temp = from.value;
+      from.value = to.value;
+      to.value = temp;
+    }
+
     function translateText() {
       var text = document.getElementById('text').value.trim();
       if (!text) {
