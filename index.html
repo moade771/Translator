@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Translator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      width: 90vw;
+      max-width: 800px;
+      height: 90vh;
+      background: #ffffff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      border-radius: 12px;
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      text-align: center;
+    }
+
+    textarea {
+      width: 100%;
+      height: 30%;
+      resize: none;
+      font-size: 18px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .select-row {
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    select {
+      font-size: 16px;
+      padding: 6px;
+      margin: 0 10px;
+    }
+
+    input[type="submit"] {
+      font-size: 18px;
+      padding: 12px;
+      margin-top: 10px;
+      background: #4285f4;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    input[type="submit"]:hover {
+      background: #3367d6;
+    }
+
+    .output {
+      background: #e8f0fe;
+      padding: 15px;
+      margin-top: 15px;
+      border: 1px solid #ccc;
+      font-size: 18px;
+      flex-grow: 1;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Translator</h2>
+
+    <div class="select-row">
+      <select id="from">
+        <option value="en">English</option>
+        <option value="fr">French</option>
+        <option value="es">Spanish</option>
+        <option value="ar">Arabic</option>
+      </select>
+      →
+      <select id="to">
+        <option value="en">English</option>
+        <option value="fr">French</option>
+        <option value="es">Spanish</option>
+        <option value="ar">Arabic</option>
+      </select>
+    </div>
+
+    <textarea id="text" placeholder="Type your text here..."></textarea>
+
+    <input type="submit" value="Translate" onclick="translateText();">
+
+    <div class="output" id="result">Your translation will appear here.</div>
+  </div>
+
+  <script>
+    function translateText() {
+      var text = document.getElementById('text').value;
+      var from = document.getElementById('from').value;
+      var to = document.getElementById('to').value;
+
+      var url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=' + from + '|' + to;
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var json = JSON.parse(xhr.responseText);
+          document.getElementById('result').innerText = json.responseData.translatedText;
+        }
+      };
+      xhr.send();
+    }
+  </script>
+</body>
+</html>
