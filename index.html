@@ -14,21 +14,20 @@
       background: #e0f7ff;
       background-image: linear-gradient(to bottom, transparent 79px, #c0e0f7 80px);
       background-size: 100% 80px;
+      overflow: auto;
     }
 
-    .container {
-      width: 90%;
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 20px;
-      background: white;
-      border: 2px solid #0074d9;
+    .full-container {
+      width: 100%;
+      min-height: 100%;
+      padding: 10px;
       box-sizing: border-box;
     }
 
     h1 {
       text-align: center;
       font-size: 24px;
+      margin-top: 10px;
       margin-bottom: 10px;
       letter-spacing: 1px;
       color: #0074d9;
@@ -48,6 +47,7 @@
     select {
       color: #0074d9;
       border: 1px solid #0074d9;
+      background: white;
     }
 
     button.switch-btn {
@@ -58,27 +58,31 @@
     }
 
     textarea {
-      width: 100%;
-      height: 150px;
+      display: block;
+      width: 90%;
+      max-width: 100%;
+      height: 120px;
+      margin: 10px auto;
       font-size: 16px;
       padding: 10px;
       box-sizing: border-box;
-      margin-bottom: 10px;
       background: #e8f0fe;
       border: 1px solid #0074d9;
       resize: vertical;
     }
 
     .output {
-      width: 100%;
-      height: 150px;
+      display: block;
+      width: 90%;
+      max-width: 100%;
+      height: 120px;
+      margin: 10px auto;
       padding: 10px;
       font-size: 16px;
       overflow-y: auto;
       background: #e8f0fe;
       border: 1px solid #0074d9;
       box-sizing: border-box;
-      margin-bottom: 10px;
     }
 
     .translate-btn {
@@ -101,7 +105,7 @@
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="full-container">
     <h1>TRANSLATORIC</h1>
 
     <div class="select-row">
