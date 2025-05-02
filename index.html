@@ -71,6 +71,21 @@
       resize: vertical;
     }
 
+    .translate-wrapper {
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    .translate-btn {
+      display: inline-block;
+      font-size: 18px;
+      padding: 8px 20px;
+      background-color: #0074d9;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
     .output {
       display: block;
       width: 90%;
@@ -83,17 +98,6 @@
       background: #e8f0fe;
       border: 1px solid #0074d9;
       box-sizing: border-box;
-    }
-
-    .translate-btn {
-      display: block;
-      margin: 10px auto;
-      font-size: 18px;
-      padding: 8px 20px;
-      background-color: #0074d9;
-      color: white;
-      border: none;
-      cursor: pointer;
     }
 
     .note {
@@ -139,7 +143,11 @@
     </div>
 
     <textarea id="text" placeholder="Type your text here..." onkeypress="handleKeyPress(event)"></textarea>
-    <button class="translate-btn" onclick="translateText()">Translate</button>
+
+    <div class="translate-wrapper">
+      <button class="translate-btn" onclick="translateText()">Translate</button>
+    </div>
+
     <div class="output" id="result">Your translation will appear here.</div>
     <div class="note">Note: avoid using shortened words like “I’m”, “u”, “don’t” — they may not translate correctly.</div>
   </div>
