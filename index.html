@@ -18,15 +18,16 @@
     }
 
     .container {
-      width: 100%;
+      width: 96%;
       max-width: 900px;
-      height: 100%;
+      height: 98%;
       padding: 20px;
       box-sizing: border-box;
       background: white;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      align-items: center;
     }
 
     h1 {
@@ -67,10 +68,12 @@
       margin-bottom: 10px;
       background: #e8f0fe;
       border: 1px solid #ccc;
+      resize: none;
     }
 
     .output {
       height: 30%;
+      width: 100%;
       background: #e8f0fe;
       padding: 15px;
       font-size: 18px;
@@ -144,11 +147,14 @@
     }
 
     function translateText() {
-      var text = document.getElementById('text').value.trim();
+      var textArea = document.getElementById('text');
+      var text = textArea.value.trim();
       if (!text) {
         document.getElementById('result').innerText = "Your translation will appear here.";
         return;
       }
+
+      textArea.blur(); // hide iPad keyboard
 
       var from = document.getElementById('from').value;
       var to = document.getElementById('to').value;
@@ -164,6 +170,14 @@
       };
       xhr.send();
     }
+
+    // Trigger translation when pressing Enter/Return
+    document.getElementById('text').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        translateText();
+      }
+    });
   </script>
 </body>
 </html>
