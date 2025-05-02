@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <title>TRANSLATORIC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://raw.githubusercontent.com/moade771/Translator/main/favicon.ico" type="image/x-icon">
+
   <style>
     html, body {
       margin: 0;
@@ -31,6 +35,17 @@
       margin-bottom: 10px;
       letter-spacing: 1px;
       color: #0074d9;
+    }
+
+    .title-row {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .title-row img {
+      vertical-align: middle;
+      height: 32px;
+      margin-right: 10px;
     }
 
     .select-row {
@@ -110,7 +125,10 @@
 </head>
 <body>
   <div class="full-container">
-    <h1>TRANSLATORIC</h1>
+    <div class="title-row">
+      <img src="https://raw.githubusercontent.com/moade771/Translator/main/Untitled209_20250502225036.png" alt="Translator Icon">
+      <h1>TRANSLATORIC</h1>
+    </div>
 
     <div class="select-row">
       <select id="from">
@@ -149,6 +167,7 @@
     </div>
 
     <div class="output" id="result">Your translation will appear here.</div>
+    <div class="note">Note: avoid using shortened words like “I’m”, “u”, “don’t” — they may not translate correctly.</div>
   </div>
 
   <script>
