@@ -5,154 +5,19 @@
   <title>TRANSLATORIC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-      font-family: Arial, sans-serif;
-      background: #e0f7ff;
-      background-image: linear-gradient(to bottom, transparent 79px, #c0e0f7 80px);
-      background-size: 100% 80px;
-      overflow: auto;
-    }
-
-    .full-container {
-      width: 100%;
-      min-height: 100%;
-      padding: 10px;
-      box-sizing: border-box;
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 24px;
-      margin-top: 10px;
-      margin-bottom: 10px;
-      letter-spacing: 1px;
-      color: #0074d9;
-    }
-
-    .select-row {
-      text-align: center;
-      margin: 10px 0;
-    }
-
-    select, button.switch-btn {
-      font-size: 16px;
-      margin: 5px;
-      padding: 5px 10px;
-    }
-
-    select {
-      color: #0074d9;
-      border: 1px solid #0074d9;
-      background: white;
-    }
-
-    button.switch-btn {
-      background-color: #0074d9;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    textarea {
-      display: block;
-      width: 90%;
-      max-width: 100%;
-      height: 120px;
-      margin: 10px auto;
-      font-size: 16px;
-      padding: 10px;
-      box-sizing: border-box;
-      background: #e8f0fe;
-      border: 1px solid #0074d9;
-      resize: vertical;
-    }
-
-    .translate-wrapper {
-      text-align: center;
-      margin: 10px 0;
-    }
-
-    .translate-btn {
-      display: inline-block;
-      font-size: 18px;
-      padding: 8px 20px;
-      background-color: #0074d9;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    .output {
-      display: block;
-      width: 90%;
-      max-width: 100%;
-      height: 120px;
-      margin: 10px auto;
-      padding: 10px;
-      font-size: 16px;
-      overflow-y: auto;
-      background: #e8f0fe;
-      border: 1px solid #0074d9;
-      box-sizing: border-box;
-    }
-
-    .note {
-      text-align: center;
-      font-size: 14px;
-      color: #333;
-      margin-top: 10px;
-    }
+    /* Same styles as before – omitted here for brevity */
+    /* Paste previous CSS from earlier message here */
   </style>
 </head>
 <body>
   <div class="full-container">
-    <h1>TRANSLATORIC</h1>
-
-    <div class="select-row">
-      <select id="from">
-        <option value="en">English</option>
-        <option value="fr">French</option>
-        <option value="es">Spanish</option>
-        <option value="ar">Arabic</option>
-        <option value="de">German</option>
-        <option value="it">Italian</option>
-        <option value="pt">Portuguese</option>
-        <option value="ru">Russian</option>
-        <option value="zh">Chinese</option>
-        <option value="ja">Japanese</option>
-      </select>
-
-      <button class="switch-btn" onclick="switchLanguages()">⇄</button>
-
-      <select id="to">
-        <option value="en">English</option>
-        <option value="fr">French</option>
-        <option value="es">Spanish</option>
-        <option value="ar">Arabic</option>
-        <option value="de">German</option>
-        <option value="it">Italian</option>
-        <option value="pt">Portuguese</option>
-        <option value="ru">Russian</option>
-        <option value="zh">Chinese</option>
-        <option value="ja">Japanese</option>
-      </select>
-    </div>
-
-    <textarea id="text" placeholder="Type your text here..." onkeypress="handleKeyPress(event)"></textarea>
-
-    <div class="translate-wrapper">
-      <button class="translate-btn" onclick="translateText()">Translate</button>
-    </div>
-
-    <div class="output" id="result">Your translation will appear here.</div>
-    <div class="note">Note: avoid using shortened words like “I’m”, “u”, “don’t” — they may not translate correctly.</div>
+    <!-- Your HTML UI elements go here -->
+    <!-- Omitted for brevity – copy from earlier code -->
   </div>
 
   <script>
+    var MAX_CHUNK_LENGTH = 450; // Slightly below 500 to be safe
+
     function switchLanguages() {
       var from = document.getElementById("from");
       var to = document.getElementById("to");
@@ -161,37 +26,85 @@
       to.value = temp;
     }
 
+    function handleKeyPress(e) {
+      if (e.keyCode === 13 && !e.shiftKey) {
+        e.preventDefault();
+        translateText();
+      }
+    }
+
     function translateText() {
       var text = document.getElementById('text').value.trim();
+      var resultDiv = document.getElementById('result');
       if (!text) {
-        document.getElementById('result').innerText = "Your translation will appear here.";
+        resultDiv.innerText = "Your translation will appear here.";
         return;
       }
 
-      var from = document.getElementById('from').value;
-      var to = document.getElementById('to').value;
-      var url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=' + from + '|' + to;
+      var sourceLang = document.getElementById('from').value;
+      var targetLang = document.getElementById('to').value;
 
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', url, true);
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          try {
-            var res = JSON.parse(xhr.responseText);
-            document.getElementById('result').innerText = res.responseData.translatedText || res.response;
-          } catch (e) {
-            document.getElementById('result').innerText = 'Translation error.';
-          }
+      // Split text into chunks
+      var chunks = splitTextIntoChunks(text, MAX_CHUNK_LENGTH);
+      var translatedChunks = [];
+
+      function processNextChunk(index) {
+        if (index >= chunks.length) {
+          // All done
+          resultDiv.innerText = translatedChunks.join('');
+          return;
         }
-      };
-      xhr.send();
+
+        var chunk = chunks[index];
+        var url = 'https://api.mymemory.translated.net/get?q=' +
+                  encodeURIComponent(chunk) +
+                  '&langpair=' + sourceLang + '|' + targetLang;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            try {
+              var res = JSON.parse(xhr.responseText);
+              var translation = res.responseData.translatedText || res.response || '[Translation error]';
+              translatedChunks.push(translation);
+              processNextChunk(index + 1);
+            } catch (e) {
+              translatedChunks.push('[Error]');
+              processNextChunk(index + 1);
+            }
+          }
+        };
+        xhr.send();
+      }
+
+      resultDiv.innerText = "Translating... please wait.";
+      processNextChunk(0); // Start translating
     }
 
-    function handleKeyPress(e) {
-      if (e.keyCode === 13 && !e.shiftKey) {
-        e.preventDefault(); // Prevent newline
-        translateText();
+    function splitTextIntoChunks(text, maxLen) {
+      var words = text.split(/\b/); // Split on word boundaries
+      var chunks = [];
+      var currentChunk = '';
+
+      for (var i = 0; i < words.length; i++) {
+        var word = words[i];
+
+        if ((currentChunk + word).length <= maxLen) {
+          currentChunk += word;
+        } else {
+          if (currentChunk.length > 0) {
+            chunks.push(currentChunk);
+          }
+          currentChunk = word;
+        }
       }
+
+      if (currentChunk.length > 0) {
+        chunks.push(currentChunk);
+      }
+
+      return chunks;
     }
   </script>
 </body>
